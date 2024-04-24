@@ -1,0 +1,41 @@
+#!/bin/sh
+# Store modules into qcow2
+
+version=$1
+size=${2:-200}
+
+if [ -z "$version" ]; then
+	echo "Usage: modules2qcow2 version [size]" >&2
+	exit 1
+fi
+
+if [ ! -d "lib/modules/$version" ]; then
+	echo "Directory not found: lib/modules/$version" >&2
+	exit 1
+fi
+
+tempdir=$(mktemp -d)
+trap 'rm -rf "$tempdir"' EXIT
+
+echo "Copying modules..."
+
+# create missing modules.dep
+[ -f "lib/modules/$version/modules.dep" ] || /sbin/depmod -a -b . "$version"
+
+# create raw image
+dd if=/dev/zero bs=1M count="$size" of="$tempdir/modules.raw" status=none || exit
+mkdir "$tempdir/modules"
+
+# copy modules into raw image
+sudo sh -c "
+mke2fs -q -t ext4 '$tempdir/modules.raw'
+mount '$tempdir/modules.raw' '$tempdir/modules'
+cp -a 'lib/modules/$version' '$tempdir/modules'
+rm -f '$tempdir/modules/$version/build' '$tempdir/modules/$version/source'
+chown -R 0:0 '$tempdir/modules'/*
+umount '$tempdir/modules'
+" || exit
+
+# convert raw image to compressed qcow2
+qemu-img convert -c -f raw -O qcow2 "$tempdir/modules.raw" "modules-$version.qcow2"
+echo "Image 'modules-$version.qcow2' created"

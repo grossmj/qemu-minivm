@@ -1,0 +1,46 @@
+#!/bin/sh
+# Create initramfs
+
+template=$1
+version=$2
+
+if [ -z "$version" ]; then
+	echo "Usage: mkinitramfs ramfs-template version" >&2
+	exit 1
+fi
+
+if [ ! -d "$template" ]; then
+	echo "Template directory not found: $template" >&2
+	exit 1
+fi
+
+if [ ! -d "lib/modules/$version" ]; then
+	echo "Module directory not found: lib/modules/$version" >&2
+	exit 1
+fi
+
+if [ ! -f modules.ramfs ]; then
+	echo "List of ramfs modules not found: module.ramfs" >&2
+	exit 1
+fi
+
+tempdir=$(mktemp -d)
+trap 'rm -rf "$tempdir"' EXIT
+
+echo "Creating initramfs..."
+
+cp -a "$template"/* "$tempdir"
+mkdir -p "$tempdir/lib/modules/$version/kernel"
+sed -e 's/\s*#.*//' -e '/^\s*$/d' modules.ramfs | xargs tar c -C "lib/modules/$version/kernel" | tar x -C "$tempdir/lib/modules/$version/kernel"
+cp -p "lib/modules/$version"/modules.* "$tempdir/lib/modules/$version/"
+/sbin/depmod -a -b "$tempdir" "$version"
+[ -f modules.autoload ] && cp -p modules.autoload "$tempdir"
+
+# set files user id to root
+sudo chown -R 0:0 "$tempdir"/* || exit
+
+# create initramfs
+{ cd "$tempdir"; find * -print0 | sort -z | cpio -o -0 --format=newc --quiet; } | gzip -9 > "initramfs-$version"
+sudo rm -rf "$tempdir"
+
+echo "Initial ramdisk 'initramfs-$version' created"

@@ -1,0 +1,41 @@
+#!/bin/sh
+# Convert docker image to qcow2
+
+image=$1
+size=${2:-200}
+init=$HOME/GNS3/minivm/init/mininit
+
+if [ -z "$image" ]; then
+	echo "Usage: docker2qcow2 image [size]" >&2
+	exit 1
+fi
+
+tempdir=$(mktemp -d)
+tempdocker=$(basename "$tempdir" | tr "A-Z." "a-z-" | tr -c -d "a-z0-9-")
+trap 'rm -rf "$tempdir"' EXIT
+
+echo "Exporting docker image..."
+
+# convert docker image to temporary image with squashed layers
+printf 'FROM %s\nFROM scratch\nCOPY --from=0 / /\n' "$image" | docker build -t "$tempdocker" - > /dev/null || exit
+# save temporary image into tar file
+docker save -o "$tempdir/docker.tar" "$tempdocker"
+docker rmi "$tempdocker" > /dev/null
+tarfile=$(tar tf "$tempdir/docker.tar" | grep '\.tar$')
+# create raw image
+dd if=/dev/zero bs=1M count="$size" of="$tempdir/image.raw" status=none || exit
+mkdir "$tempdir/image"
+
+# extract tar file into raw ext4 image, add init program
+sudo sh -c "
+mke2fs -q -t ext4 '$tempdir/image.raw'
+mount '$tempdir/image.raw' '$tempdir/image'
+tar xOf '$tempdir/docker.tar' '$tarfile' | tar x -C '$tempdir/image'
+rm -f '$tempdir/image/sbin/init'
+cp '$init' '$tempdir/image/sbin/init'
+umount '$tempdir/image'
+" || exit
+
+# convert raw image to compressed qcow2
+qemu-img convert -c -f raw -O qcow2 "$tempdir/image.raw" "$image.qcow2"
+echo "Image '$image.qcow2' created"

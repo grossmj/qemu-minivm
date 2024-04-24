@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Mount the /proc and /sys filesystems.
+mount -t proc none /proc
+mount -t sysfs none /sys
+
+# Load default modules
+[ -f /modules.autoload ] && xargs -r /sbin/modprobe -a < /modules.autoload
+
+# detect devices
+echo > /tmp/prev
+while true; do
+	find /sys -name modalias | sort > /tmp/cur
+	cmp -s /tmp/prev /tmp/cur && break
+	comm -13 /tmp/prev /tmp/cur | \
+		xargs sort -u | xargs -r /sbin/modprobe -abq
+	mv /tmp/cur /tmp/prev
+done
+rm -f /tmp/prev /tmp/cur
+
+# Update /dev
+mdev -s
+
+# Parse kernel cmdline
+root=/dev/sda
+rdonly=y
+for opt in $(cat /proc/cmdline); do
+	case $opt in
+		root=*)
+			root=${opt#root=} ;;
+		ro)
+			rdonly=y ;;
+		rw)
+			rdonly= ;;
+	esac
+done
+
+# Mount the root filesystem.
+mount ${rdonly:+-r} "$root" /mnt/root
+
+# Clean up.
+umount /proc
+umount /sys
+
+# Boot the real thing.
+exec switch_root /mnt/root /sbin/init

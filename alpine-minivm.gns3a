@@ -1,0 +1,64 @@
+{
+    "appliance_id": "f5156266-6485-4c2f-8639-411933a690c7",
+    "name": "Alpine-minivm",
+    "category": "guest",
+    "description": "Alpine Linux is a security-oriented, lightweight Linux distribution based on musl libc and busybox.",
+    "vendor_name": "Alpine",
+    "vendor_url": "https://www.alpinelinux.org",
+    "product_name": "Alpine",
+    "registry_version": 4,
+    "status": "experimental",
+    "maintainer": "Bernhard Ehlers",
+    "maintainer_email": "b-ehlers@example.com",
+    "usage": "For a clean shutdown set in the node properties and/or in the template the parameter \"On close\" to \"Send the shutdown signal (ACPI)\".\n\nIf modules are needed, the line in /etc/init.sh that mounts the module disk must be uncommented.",
+    "symbol": "linux_guest.svg",
+    "port_name_format": "eth{0}",
+    "qemu": {
+        "adapter_type": "virtio-net-pci",
+        "adapters": 1,
+        "ram": 256,
+        "hda_disk_interface": "scsi",
+        "hdb_disk_interface": "scsi",
+        "arch": "x86_64",
+        "console_type": "telnet",
+        "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
+        "kvm": "allow"
+    },
+    "images": [
+        {
+            "filename": "alpine-minivm.qcow2",
+            "version": "1.0",
+            "md5sum": "b0c34a9e3ce6e4c0a6ac3aba93f2da00",
+            "filesize": 4234240
+        },
+        {
+            "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+            "version": "1.0",
+            "md5sum": "75b186c33fad7ea14834cfee19c02db0",
+            "filesize": 14021856
+        },
+        {
+            "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
+            "version": "1.0",
+            "md5sum": "a51ceca543fa24913e0c8b3e1d9a77fa",
+            "filesize": 1619894
+        },
+        {
+            "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
+            "version": "1.0",
+            "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
+            "filesize": 25373696
+        }
+    ],
+    "versions": [
+        {
+            "name": "1.0",
+            "images": {
+                "hda_disk_image": "alpine-minivm.qcow2",
+                "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+                "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
+                "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"
+            }
+        }
+    ]
+}

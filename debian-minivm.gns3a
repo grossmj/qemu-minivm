@@ -1,0 +1,64 @@
+{
+    "appliance_id": "bed7d4f6-a6b1-497d-9c0e-eadd0f70673c",
+    "name": "Debian-minivm",
+    "category": "guest",
+    "description": "Debian is a GNU/Linux distribution composed of free and open-source software, developed by the community-supported Debian Project.",
+    "vendor_name": "Debian",
+    "vendor_url": "https://www.debian.org",
+    "product_name": "Debian",
+    "registry_version": 4,
+    "status": "experimental",
+    "maintainer": "Bernhard Ehlers",
+    "maintainer_email": "b-ehlers@example.com",
+    "usage": "For a clean shutdown set in the node properties and/or in the template the parameter \"On close\" to \"Send the shutdown signal (ACPI)\".\n\nIf modules are needed, the line in /etc/init.sh that mounts the module disk must be uncommented.",
+    "symbol": "linux_guest.svg",
+    "port_name_format": "eth{0}",
+    "qemu": {
+        "adapter_type": "virtio-net-pci",
+        "adapters": 1,
+        "ram": 256,
+        "hda_disk_interface": "scsi",
+        "hdb_disk_interface": "scsi",
+        "arch": "x86_64",
+        "console_type": "telnet",
+        "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
+        "kvm": "allow"
+    },
+    "images": [
+        {
+            "filename": "debian-minivm.qcow2",
+            "version": "1.0",
+            "md5sum": "aaeb8a9e1baf0357a9479c0686785eca",
+            "filesize": 40808960
+        },
+        {
+            "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+            "version": "1.0",
+            "md5sum": "75b186c33fad7ea14834cfee19c02db0",
+            "filesize": 14021856
+        },
+        {
+            "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
+            "version": "1.0",
+            "md5sum": "a51ceca543fa24913e0c8b3e1d9a77fa",
+            "filesize": 1619894
+        },
+        {
+            "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
+            "version": "1.0",
+            "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
+            "filesize": 25373696
+        }
+    ],
+    "versions": [
+        {
+            "name": "1.0",
+            "images": {
+                "hda_disk_image": "debian-minivm.qcow2",
+                "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+                "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
+                "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"
+            }
+        }
+    ]
+}
