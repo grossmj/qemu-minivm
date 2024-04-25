@@ -24,6 +24,7 @@ mdev -s
 # Parse kernel cmdline
 root=/dev/sda
 rdonly=y
+set -f
 for opt in $(cat /proc/cmdline); do
 	case $opt in
 		root=*)
@@ -34,6 +35,7 @@ for opt in $(cat /proc/cmdline); do
 			rdonly= ;;
 	esac
 done
+set +f
 
 # Mount the root filesystem.
 mount ${rdonly:+-r} "$root" /mnt/root

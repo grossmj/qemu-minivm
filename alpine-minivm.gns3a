@@ -40,8 +40,8 @@
         {
             "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
             "version": "1.0",
-            "md5sum": "442faa11cd063b0d8a6bf8a96f7b18a1",
-            "filesize": 1619895
+            "md5sum": "1b69e76a6b54d374e4dae1211f0a12fd",
+            "filesize": 1619909
         },
         {
             "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
