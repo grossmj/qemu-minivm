@@ -9,7 +9,7 @@ mount -t sysfs none /sys
 
 # detect devices
 echo > /tmp/prev
-while true; do
+for _ in 1 2 3 4 5 6 7 8; do
 	find /sys -name modalias | sort > /tmp/cur
 	cmp -s /tmp/prev /tmp/cur && break
 	comm -13 /tmp/prev /tmp/cur | \
