@@ -3,10 +3,15 @@
 
 image=$1
 size=${2:-200}
-init=$HOME/GNS3/minivm/init/mininit
+init=$(dirname -- "$0")/init/mininit
 
 if [ -z "$image" ]; then
 	echo "Usage: docker2qcow2 image [size]" >&2
+	exit 1
+fi
+
+if [ ! -f "$init" ]; then
+	echo "Init program not found: $init" >&2
 	exit 1
 fi
 
@@ -32,7 +37,7 @@ mke2fs -q -t ext4 '$tempdir/image.raw'
 mount '$tempdir/image.raw' '$tempdir/image'
 tar xOf '$tempdir/docker.tar' '$tarfile' | tar x -C '$tempdir/image'
 rm -f '$tempdir/image/sbin/init'
-cp '$init' '$tempdir/image/sbin/init'
+cp -- '$init' '$tempdir/image/sbin/init'
 umount '$tempdir/image'
 " || exit
 
