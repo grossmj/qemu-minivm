@@ -26,35 +26,35 @@
     },
     "images": [
         {
-            "filename": "alpine-minivm.qcow2",
-            "version": "1.0",
+            "filename": "alpine-minivm-3.19.1.qcow2",
+            "version": "3.19.1",
             "md5sum": "b0c34a9e3ce6e4c0a6ac3aba93f2da00",
             "filesize": 4234240
         },
         {
             "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "75b186c33fad7ea14834cfee19c02db0",
             "filesize": 14021856
         },
         {
             "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "1b69e76a6b54d374e4dae1211f0a12fd",
             "filesize": 1619909
         },
         {
             "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
             "filesize": 25373696
         }
     ],
     "versions": [
         {
-            "name": "1.0",
+            "name": "3.19.1",
             "images": {
-                "hda_disk_image": "alpine-minivm.qcow2",
+                "hda_disk_image": "alpine-minivm-3.19.1.qcow2",
                 "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
                 "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
                 "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"

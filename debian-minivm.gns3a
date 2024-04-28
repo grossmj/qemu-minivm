@@ -26,35 +26,35 @@
     },
     "images": [
         {
-            "filename": "debian-minivm.qcow2",
-            "version": "1.0",
+            "filename": "debian-minivm-12.5.qcow2",
+            "version": "12.5",
             "md5sum": "aaeb8a9e1baf0357a9479c0686785eca",
             "filesize": 40808960
         },
         {
             "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "75b186c33fad7ea14834cfee19c02db0",
             "filesize": 14021856
         },
         {
             "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "1b69e76a6b54d374e4dae1211f0a12fd",
             "filesize": 1619909
         },
         {
             "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
-            "version": "1.0",
+            "version": "6.1.76",
             "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
             "filesize": 25373696
         }
     ],
     "versions": [
         {
-            "name": "1.0",
+            "name": "12.5",
             "images": {
-                "hda_disk_image": "debian-minivm.qcow2",
+                "hda_disk_image": "debian-minivm-12.5.qcow2",
                 "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
                 "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
                 "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"
