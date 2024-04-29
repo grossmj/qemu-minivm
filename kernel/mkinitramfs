@@ -1,31 +1,24 @@
 #!/bin/sh
 # Create initramfs
 
+set -e
+trap 'exit' INT QUIT TERM
+
+die() {
+	echo "$@" >&2
+	exit 1
+}
+
 template=$1
 version=$2
 
-if [ -z "$version" ]; then
-	echo "Usage: mkinitramfs ramfs-template version" >&2
-	exit 1
-fi
-
-if [ ! -d "$template" ]; then
-	echo "Template directory not found: $template" >&2
-	exit 1
-fi
-
-if [ ! -d "lib/modules/$version" ]; then
-	echo "Module directory not found: lib/modules/$version" >&2
-	exit 1
-fi
-
-if [ ! -f modules.ramfs ]; then
-	echo "List of ramfs modules not found: module.ramfs" >&2
-	exit 1
-fi
+[ -z "$version" ] && die "Usage: mkinitramfs ramfs-template version"
+[ -d "$template" ] || die "Template directory not found: $template"
+[ -d "lib/modules/$version" ] || die "Module directory not found: lib/modules/$version"
+[ -f modules.ramfs ] || die "List of ramfs modules not found: module.ramfs"
 
 tempdir=$(mktemp -d)
-trap 'rm -rf "$tempdir"' EXIT
+trap 'rm -rf "$tempdir" 2> /dev/null' EXIT
 
 echo "Creating initramfs..."
 
@@ -37,7 +30,7 @@ cp -p "lib/modules/$version"/modules.* "$tempdir/lib/modules/$version/"
 [ -f modules.autoload ] && cp -p modules.autoload "$tempdir"
 
 # set files user id to root
-sudo chown -R 0:0 "$tempdir"/* || exit
+sudo chown -R 0:0 "$tempdir"/*
 
 # create initramfs
 { cd "$tempdir"; find * -print0 | sort -z | cpio -o -0 --format=newc --quiet; } | gzip -9 > "initramfs-$version"

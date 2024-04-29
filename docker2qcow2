@@ -1,45 +1,52 @@
 #!/bin/sh
 # Convert docker image to qcow2
 
+set -e
+trap 'exit' INT QUIT TERM
+
+die() {
+	echo "$@" >&2
+	exit 1
+}
+
 image=$1
 size=${2:-200}
 init=$(dirname -- "$0")/init/mininit
 
-if [ -z "$image" ]; then
-	echo "Usage: docker2qcow2 image [size]" >&2
-	exit 1
-fi
+[ -z "$image" ] && die "Usage: docker2qcow2 image [size_MB]"
+[ -f "$init" ] || die "Init program not found: $init"
 
-if [ ! -f "$init" ]; then
-	echo "Init program not found: $init" >&2
-	exit 1
-fi
+# check image size
+image_size=$(docker inspect --format '{{.Size}}' "$image")
+image_size=$(((image_size*13/10/1024 + 512)/1024))
+[ "$image_size" -gt "$size" ] && die "size should be at least ${image_size}MB"
 
 tempdir=$(mktemp -d)
 tempdocker=$(basename "$tempdir" | tr "A-Z." "a-z-" | tr -c -d "a-z0-9-")
-trap 'rm -rf "$tempdir"' EXIT
+trap 'rm -rf "$tempdir" 2> /dev/null' EXIT
 
 echo "Exporting docker image..."
 
 # convert docker image to temporary image with squashed layers
-printf 'FROM %s\nFROM scratch\nCOPY --from=0 / /\n' "$image" | docker build -t "$tempdocker" - > /dev/null || exit
+printf 'FROM %s\nFROM scratch\nCOPY --from=0 / /\n' "$image" | docker build -t "$tempdocker" - > /dev/null
 # save temporary image into tar file
 docker save -o "$tempdir/docker.tar" "$tempdocker"
 docker rmi "$tempdocker" > /dev/null
 tarfile=$(tar tf "$tempdir/docker.tar" | grep '\.tar$')
 # create raw image
-dd if=/dev/zero bs=1M count="$size" of="$tempdir/image.raw" status=none || exit
+dd if=/dev/zero bs=1M count="$size" of="$tempdir/image.raw" status=none
 mkdir "$tempdir/image"
 
 # extract tar file into raw ext4 image, add init program
-sudo sh -c "
+sudo sh -c -e "
+trap 'exit' INT QUIT TERM
 mke2fs -q -t ext4 '$tempdir/image.raw'
 mount '$tempdir/image.raw' '$tempdir/image'
+trap \"umount '$tempdir/image'\" EXIT
 tar xOf '$tempdir/docker.tar' '$tarfile' | tar x -C '$tempdir/image'
 rm -f '$tempdir/image/sbin/init'
 cp -- '$init' '$tempdir/image/sbin/init'
-umount '$tempdir/image'
-" || exit
+"
 
 # convert raw image to compressed qcow2
 qemu-img convert -c -f raw -O qcow2 "$tempdir/image.raw" "$image.qcow2"
