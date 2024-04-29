@@ -37,6 +37,12 @@ char *const default_environment[] = {
     NULL,
 };
 
+/* print error and exit */
+void perror_exit(const char *s) {
+    perror(s);
+    exit(1);
+}
+
 /* halt VM */
 void do_halt(void) {
     static int run_once = 0;
@@ -55,23 +61,20 @@ void do_halt(void) {
 
     fprintf(stderr, "Unmounting all filesystems...\n");
     pid = fork();
-    if (pid < 0) {
-        perror("fork");
-        exit(1);
-    } else if (pid == 0) {	/* child */
+    if (pid < 0)
+        perror_exit("fork");
+    else if (pid == 0) {	/* child */
         execl("/bin/umount", "umount", "-a", "-r", NULL);
-        perror("Exec umount failed");
-        exit(1);
+        perror_exit("Exec umount failed");
     }
     waitpid(pid, NULL, 0);
 
     /* reboot should not be called by the init process,
        otherwise the kernel will panic. */
     pid = fork();
-    if (pid < 0) {
-        perror("fork");
-        exit(1);
-    } else if (pid == 0) {	/* child */
+    if (pid < 0)
+        perror_exit("fork");
+    else if (pid == 0) {	/* child */
         sync();
         reboot(RB_POWER_OFF);
         _exit(0);
@@ -93,15 +96,13 @@ void mount_check (
     /* create mount point, if it doesn't exist */
     if (stat(target, &info) < 0 && errno == ENOENT) {
         if (mkdir(target, 0755) < 0) {
-            fprintf(stderr, "mkdir %s: ", target); perror(NULL);
-            exit(1);
+            fprintf(stderr, "mkdir %s: ", target); perror_exit(NULL);
         }
     }
 
     /* mount filesystem */
     if (mount(source, target, filesystemtype, mountflags, data) < 0) {
-        fprintf(stderr, "mount %s: ", target); perror(NULL);
-        exit(1);
+        fprintf(stderr, "mount %s: ", target); perror_exit(NULL);
     }
 }
 
@@ -127,10 +128,9 @@ int main(int argc, char *argv[]) {
     /* start initial program */
     ioctl(STDIN_FILENO, TIOCNOTTY);		/* detach controlling tty */
     child_pid = fork();
-    if (child_pid < 0) {
-        perror("fork");
-        return 1;
-    } else if (child_pid == 0) {
+    if (child_pid < 0)
+        perror_exit("fork");
+    else if (child_pid == 0) {
         /* child */
         if (setsid() < 0)			/* start a new session */
             perror("setsid");
@@ -141,8 +141,7 @@ int main(int argc, char *argv[]) {
         /* fallback to /bin/sh */
         fprintf(stderr, "Falling back to /bin/sh\n");
         execle("/bin/sh", "/bin/sh", NULL, default_environment);
-        perror("Exec /bin/sh failed");
-        exit(1);
+        perror_exit("Exec /bin/sh failed");
     }
 
     /* catch signals for halt/poweroff/reboot */
