@@ -12,7 +12,7 @@ die() {
 template=$1
 version=$2
 
-[ -z "$version" ] && die "Usage: mkinitramfs ramfs-template version"
+[ -n "$version" ] || die "Usage: mkinitramfs ramfs-template version"
 [ -d "$template" ] || die "Template directory not found: $template"
 [ -d "lib/modules/$version" ] || die "Module directory not found: lib/modules/$version"
 [ -f modules.ramfs ] || die "List of ramfs modules not found: module.ramfs"
@@ -26,14 +26,10 @@ cp -a "$template"/* "$tempdir"
 mkdir -p "$tempdir/lib/modules/$version/kernel"
 sed -e 's/\s*#.*//' -e '/^\s*$/d' modules.ramfs | xargs tar c -C "lib/modules/$version/kernel" | tar x -C "$tempdir/lib/modules/$version/kernel"
 cp -p "lib/modules/$version"/modules.* "$tempdir/lib/modules/$version/"
-/sbin/depmod -a -b "$tempdir" "$version"
+PATH="/sbin:/usr/sbin:$PATH" depmod -a -b "$tempdir" "$version"
 [ -f modules.autoload ] && cp -p modules.autoload "$tempdir"
 
-# set files user id to root
-sudo chown -R 0:0 "$tempdir"/*
-
 # create initramfs
-{ cd "$tempdir"; find * -print0 | sort -z | cpio -o -0 --format=newc --quiet; } | gzip -9 > "initramfs-$version"
-sudo rm -rf "$tempdir"
+{ cd "$tempdir"; find . ! -path . | cut -c 3- | LANG=C sort | cpio -o -R root: --format=newc --quiet; } | gzip -9 > "initramfs-$version"
 
 echo "Initial ramdisk 'initramfs-$version' created"
