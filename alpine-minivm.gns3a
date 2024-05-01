@@ -28,8 +28,8 @@
         {
             "filename": "alpine-minivm-3.19.1.qcow2",
             "version": "3.19.1",
-            "md5sum": "7cfe2327b1c3f6d22a20075c1dcf3bb4",
-            "filesize": 4234240
+            "md5sum": "eacab3260825624553598d9b29c2cd15",
+            "filesize": 4272640
         },
         {
             "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
@@ -40,8 +40,8 @@
         {
             "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
             "version": "6.1.76",
-            "md5sum": "1b69e76a6b54d374e4dae1211f0a12fd",
-            "filesize": 1619909
+            "md5sum": "32a5df551e112d45983ddffd99309f69",
+            "filesize": 1620217
         },
         {
             "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",

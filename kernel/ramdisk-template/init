@@ -45,4 +45,4 @@ umount /proc
 umount /sys
 
 # Boot the real thing.
-exec switch_root /mnt/root /sbin/init
+exec switch_root /mnt/root /sbin/init "$@"

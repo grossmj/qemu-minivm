@@ -108,10 +108,16 @@ void mount_check (
 
 int main(int argc, char *argv[]) {
     pid_t child_pid, wait_pid;
+    char *const *env;
 
     if (getpid() != 1) {
         fprintf(stderr, "init must run as pid 1\n");
         return 1;
+    }
+
+    /* update environment */
+    for (env = default_environment; *env != NULL; env++) {
+        putenv(*env);
     }
 
     /* mount important filesystems */
@@ -136,11 +142,12 @@ int main(int argc, char *argv[]) {
             perror("setsid");
         ioctl(STDIN_FILENO, TIOCSCTTY, 0);	/* attach controlling tty */
         /* start /etc/init.sh */
-        execle("/etc/init.sh", "/etc/init.sh", NULL, default_environment);
+        argv[0] = "/etc/init.sh";
+        execv(argv[0], argv);
         perror("Exec /etc/init.sh failed");
         /* fallback to /bin/sh */
         fprintf(stderr, "Falling back to /bin/sh\n");
-        execle("/bin/sh", "/bin/sh", NULL, default_environment);
+        execl("/bin/sh", "/bin/sh", NULL);
         perror_exit("Exec /bin/sh failed");
     }
 
