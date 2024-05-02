@@ -24,18 +24,16 @@ mdev -s
 # Parse kernel cmdline
 root=/dev/sda
 rdonly=y
-set -f
-for opt in $(cat /proc/cmdline); do
+while read -r opt; do
 	case $opt in
-		root=*)
-			root=${opt#root=} ;;
-		ro)
-			rdonly=y ;;
-		rw)
-			rdonly= ;;
+		--)	break ;;
+		root=*)	root=${opt#root=} ;;
+		ro)	rdonly=y ;;
+		rw)	rdonly= ;;
 	esac
-done
-set +f
+done << EndOfCmdline
+$(split_cmdline < /proc/cmdline)
+EndOfCmdline
 
 # Mount the root filesystem.
 mount ${rdonly:+-r} "$root" /mnt/root

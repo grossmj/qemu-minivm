@@ -1,0 +1,15 @@
+#!/usr/bin/awk -f
+# split /proc/cmdline into lines with one argument each
+
+{
+	line = $0
+	sub(/^[[:space:]]*/, "", line)
+	while (line) {
+		match(line, /^("[^"]*("|$)|[^"[:space:]]+)+/)
+		arg = substr(line, RSTART, RLENGTH)
+		line = substr(line, RSTART+RLENGTH)
+		gsub(/"/, "", arg)
+		print(arg)
+		sub(/^[[:space:]]*/, "", line)
+	}
+}
