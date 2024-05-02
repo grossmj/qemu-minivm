@@ -1,0 +1,7 @@
+*.qcow2
+kernel/initram*
+kernel/*-initram*
+kernel/*vmlinu*
+kernel/*kernel*
+kernel/*.deb
+kernel/lib
