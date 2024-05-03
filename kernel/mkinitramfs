@@ -26,7 +26,7 @@ cp -a "$template"/* "$tempdir"
 mkdir -p "$tempdir/lib/modules/$version/kernel"
 sed -e 's/\s*#.*//' -e '/^\s*$/d' modules.ramfs | xargs tar c -C "lib/modules/$version/kernel" | tar x -C "$tempdir/lib/modules/$version/kernel"
 cp -p "lib/modules/$version"/modules.* "$tempdir/lib/modules/$version/"
-PATH="/sbin:/usr/sbin:$PATH" depmod -a -b "$tempdir" "$version"
+PATH="$PATH:/usr/sbin:/sbin" depmod -a -b "$tempdir" "$version"
 [ -f modules.autoload ] && cp -p modules.autoload "$tempdir"
 
 # create initramfs

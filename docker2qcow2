@@ -36,7 +36,7 @@ docker rmi "$tempdocker" > /dev/null
 
 # create raw image
 dd if=/dev/zero bs=1M count="$size" of="$tempdir/image.raw" status=none
-PATH="/sbin:/usr/sbin:$PATH" mke2fs -q -t ext4 "$tempdir/image.raw"
+PATH="$PATH:/usr/sbin:/sbin" mke2fs -q -t ext4 "$tempdir/image.raw"
 
 # copy init
 cp "$init" "$tempdir/init"
