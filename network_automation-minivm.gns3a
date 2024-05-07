@@ -1,0 +1,64 @@
+{
+    "appliance_id": "53e88efc-ed3a-4ae9-a9ab-2bece78edec9",
+    "name": "Network Automation",
+    "category": "guest",
+    "description": "This appliance provides the popular tools used for network automation: Netmiko, NAPALM, Pyntc and Ansible.",
+    "vendor_name": "GNS3",
+    "vendor_url": "https://www.gns3.com",
+    "product_name": "Network Automation",
+    "registry_version": 4,
+    "status": "experimental",
+    "maintainer": "Bernhard Ehlers",
+    "maintainer_email": "b-ehlers@example.com",
+    "usage": "For a clean shutdown set in the node properties and/or in the template the parameter \"On close\" to \"Send the shutdown signal (ACPI)\".\n\nIf modules are needed, the line in /etc/init.sh that mounts the module disk must be uncommented.",
+    "symbol": "linux_guest.svg",
+    "port_name_format": "eth{0}",
+    "qemu": {
+        "adapter_type": "virtio-net-pci",
+        "adapters": 1,
+        "ram": 512,
+        "hda_disk_interface": "scsi",
+        "hdb_disk_interface": "scsi",
+        "arch": "x86_64",
+        "console_type": "telnet",
+        "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
+        "kvm": "allow"
+    },
+    "images": [
+        {
+            "filename": "network_automation-24.04.1.qcow2",
+            "version": "24.04.1",
+            "md5sum": "74c89b1b89f50e917efdf0720de74f90",
+            "filesize": 258033664
+        },
+        {
+            "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+            "version": "6.1.76",
+            "md5sum": "75b186c33fad7ea14834cfee19c02db0",
+            "filesize": 14021856
+        },
+        {
+            "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
+            "version": "6.1.76",
+            "md5sum": "e2b292c9a43847487742458db6fe9102",
+            "filesize": 1620380
+        },
+        {
+            "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
+            "version": "6.1.76",
+            "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
+            "filesize": 25373696
+        }
+    ],
+    "versions": [
+        {
+            "name": "24.04.1",
+            "images": {
+                "hda_disk_image": "network_automation-24.04.1.qcow2",
+                "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+                "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
+                "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"
+            }
+        }
+    ]
+}
