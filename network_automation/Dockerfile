@@ -20,9 +20,7 @@ RUN set -e -x \
     && apt-get -y --no-install-recommends install \
        curl ca-certificates gpg lsb-release \
     && curl -s https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-#    HashiCorp doesn't officially support Noble yet, use Mantic for now
-#    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list \
-    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com mantic main" > /etc/apt/sources.list.d/hashicorp.list \
+    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list \
     && apt-get update \
 #
 # install network automation tools
