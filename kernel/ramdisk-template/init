@@ -36,6 +36,7 @@ $(split_cmdline < /proc/cmdline)
 EndOfCmdline
 
 # Mount the root filesystem.
+[ -z "$rdonly" ] && e2fsck "$root"
 mount ${rdonly:+-r} "$root" /mnt/root
 
 # Clean up.
