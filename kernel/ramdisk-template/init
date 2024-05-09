@@ -22,18 +22,30 @@ rm -f /tmp/prev /tmp/cur
 mdev -s
 
 # Parse kernel cmdline
+init=/sbin/init
 root=/dev/sda
 rdonly=y
+single=
 while read -r opt; do
 	case $opt in
 		--)	break ;;
+		init=*)	init=${opt#init=} ;;
 		root=*)	root=${opt#root=} ;;
 		ro)	rdonly=y ;;
 		rw)	rdonly= ;;
+		single)	single=y ;;
 	esac
 done << EndOfCmdline
 $(split_cmdline < /proc/cmdline)
 EndOfCmdline
+
+# Recovery shell
+if [ -n "$single" ]; then
+	echo "Entering recovery shell..."
+	ash -i +m
+	echo
+	echo "Continuing the boot process..."
+fi
 
 # Mount the root filesystem.
 [ -z "$rdonly" ] && e2fsck "$root"
@@ -44,4 +56,4 @@ umount /proc
 umount /sys
 
 # Boot the real thing.
-exec switch_root /mnt/root /sbin/init "$@"
+exec switch_root /mnt/root "$init" "$@"
