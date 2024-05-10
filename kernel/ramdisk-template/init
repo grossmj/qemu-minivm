@@ -42,7 +42,7 @@ EndOfCmdline
 # Recovery shell
 if [ -n "$single" ]; then
 	echo "Entering recovery shell..."
-	ash -i +m
+	setsid -c ash -i
 	echo
 	echo "Continuing the boot process..."
 fi
