@@ -32,4 +32,4 @@ PATH="$PATH:/usr/sbin:/sbin" depmod -a -b "$tempdir" "$version"
 # create initramfs
 { cd "$tempdir"; find . ! -path . | cut -c 3- | LANG=C sort | cpio -o -R root: --format=newc --quiet; } | gzip -9 > "initramfs-$version"
 
-echo "Initial ramdisk 'initramfs-$version' created"
+echo "Initial RAM disk 'initramfs-$version' created"

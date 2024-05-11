@@ -3,7 +3,7 @@
 Compiling our own kernel is a complex task, mainly
 because of the 10000 parameters that need to be set.
 So I decided to use one of the distribution kernels.
-But this requires the use of an initial ramdisk.
+But this requires the use of an initial RAM disk.
 
 As a base, I chose the kernel from the
 [Debian Official Cloud Images](https://cloud.debian.org/images/cloud/).
@@ -28,8 +28,8 @@ The command `./modules2qcow2 <kernel_version>` takes the modules
 from `lib/modules/<kernel_version>` and packs them into
 `modules-<kernel_version>.qcow2`.
 
-Finally we have to create the initial ramdisk.
-We don't want to put all the modules into the ramdisk.
+Finally we have to create the initial RAM disk.
+We don't want to put all the modules into the RAM disk.
 So we need to create/modify the `modules.ramfs` configuration file,
 which contains the files/directories of the modules we want to include.
 The easiest way is to boot an image with this kernel and
