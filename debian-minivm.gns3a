@@ -22,7 +22,8 @@
         "arch": "x86_64",
         "console_type": "telnet",
         "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
-        "kvm": "allow"
+        "kvm": "allow",
+        "options": "-device virtio-rng-pci"
     },
     "images": [
         {
@@ -40,8 +41,8 @@
         {
             "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
             "version": "6.1.76",
-            "md5sum": "e4977df7c586bd739f6054a02d4804aa",
-            "filesize": 2486524
+            "md5sum": "775abc2138ba18db75d9d96e97abcdea",
+            "filesize": 2489188
         },
         {
             "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",

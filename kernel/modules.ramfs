@@ -1,10 +1,11 @@
 # Modules for initramfs
 
-drivers/ata			# ata_generic, ata_piix, libata
+drivers/ata				# ata_generic, ata_piix, libata
 drivers/acpi/button.ko
 drivers/block/loop.ko
 drivers/block/virtio_blk.ko
-drivers/cdrom			# cdrom
+drivers/cdrom				# cdrom
+drivers/char/hw_random/virtio-rng.ko	# virtio_rng
 drivers/firmware/qemu_fw_cfg.ko
 drivers/input/evdev.ko
 drivers/input/serio/serio_raw.ko
@@ -19,7 +20,7 @@ drivers/scsi/virtio_scsi.ko
 # virtio virtio_pci virtio_pci_legacy_dev virtio_pci_modern_dev virtio_ring
 drivers/virtio
 fs/binfmt_misc.ko
-fs/fat				# fat msdos vfat
+fs/fat					# fat msdos vfat
 fs/fuse/fuse.ko
 fs/nls/nls_ascii.ko
 fs/nls/nls_cp437.ko
