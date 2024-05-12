@@ -19,7 +19,7 @@ init=$(dirname -- "$0")/init/mininit
 # check image size
 image_size=$(docker inspect --format '{{.Size}}' "$image")
 image_size=$(((image_size*13/10/1024 + 512)/1024))
-[ "$image_size" -le "$size" ] || die "size should be at least ${image_size}MB"
+[ "$image_size" -le "$size" ] || die "size should be at least ${image_size} MB"
 
 tempdir=$(mktemp -d)
 trap 'rm -rf "$tempdir" 2> /dev/null' EXIT

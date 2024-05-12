@@ -29,8 +29,8 @@
         {
             "filename": "network_automation-24.04.1.qcow2",
             "version": "24.04.1",
-            "md5sum": "9fe399adbf9e8aa665b6ed7bd67a240a",
-            "filesize": 257969664
+            "md5sum": "b8f1adb7f089691e4887f2445947c3b7",
+            "filesize": 257976832
         },
         {
             "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
