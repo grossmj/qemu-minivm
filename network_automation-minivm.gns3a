@@ -22,7 +22,7 @@
         "arch": "x86_64",
         "console_type": "telnet",
         "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
-        "kvm": "allow",
+        "kvm": "require",
         "options": "-device virtio-rng-pci"
     },
     "images": [
