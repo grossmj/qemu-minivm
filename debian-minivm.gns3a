@@ -10,7 +10,7 @@
     "status": "experimental",
     "maintainer": "Bernhard Ehlers",
     "maintainer_email": "b-ehlers@example.com",
-    "usage": "For a clean shutdown set in the node properties and/or in the template the parameter \"On close\" to \"Send the shutdown signal (ACPI)\".\n\nIf modules are needed, the line in /etc/init.sh that mounts the module disk must be uncommented.",
+    "usage": "If modules are needed, the line in /etc/init.sh that mounts the module disk must be uncommented.",
     "symbol": "linux_guest.svg",
     "port_name_format": "eth{0}",
     "qemu": {
@@ -23,7 +23,8 @@
         "console_type": "telnet",
         "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw",
         "kvm": "allow",
-        "options": "-device virtio-rng-pci"
+        "options": "-device virtio-rng-pci",
+        "on_close": "shutdown_signal"
     },
     "images": [
         {

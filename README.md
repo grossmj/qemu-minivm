@@ -77,7 +77,4 @@ by running `sync` then `poweroff -f`.
 
 ## GNS3 Integration
 
-By importing the *.gns3a appliances you can use them in GNS3.
-As noted in the usage instruction, for a clean shutdown I recommend to
-set the parameter "On close" to "Send the shutdown signal (ACPI)"
-in the node properties and/or in the template.
+By importing the *.gns3a appliances you can directly use them in GNS3.
