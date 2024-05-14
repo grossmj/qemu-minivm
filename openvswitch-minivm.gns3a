@@ -1,0 +1,67 @@
+{
+    "appliance_id": "2d90f582-11e0-4089-ab04-24dae8c691bc",
+    "name": "Open vSwitch minivm",
+    "category": "multilayer_switch",
+    "description": "Open vSwitch is a production quality, multilayer virtual switch licensed under the open source Apache 2.0 license.  It is designed to enable massive network automation through programmatic extension, while still supporting standard management interfaces and protocols (e.g. NetFlow, sFlow, IPFIX, RSPAN, CLI, LACP, 802.1ag).  In addition, it is designed to support distribution across multiple physical servers similar to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V. This is a version of the appliance with a management interface on eth0.",
+    "vendor_name": "Open vSwitch",
+    "vendor_url": "http://openvswitch.org/",
+    "documentation_url": "http://openvswitch.org/support/",
+    "product_name": "Open vSwitch",
+    "registry_version": 4,
+    "status": "experimental",
+    "maintainer": "Bernhard Ehlers",
+    "maintainer_email": "b-ehlers@example.com",
+    "usage": "The eth0 is the management interface. By default all other interfaces are connected to the br0",
+    "symbol": ":/symbols/multilayer_switch.svg",
+    "port_name_format": "eth{0}",
+    "qemu": {
+        "adapter_type": "virtio-net-pci",
+        "adapters": 16,
+        "ram": 512,
+        "hda_disk_interface": "scsi",
+        "hdb_disk_interface": "scsi",
+        "arch": "x86_64",
+        "console_type": "telnet",
+        "kernel_command_line": "console=ttyS0 quiet root=/dev/sda rw MANAGEMENT_INTERFACE=eth0",
+        "kvm": "allow",
+        "options": "-device virtio-rng-pci",
+        "on_close": "shutdown_signal"
+    },
+    "images": [
+        {
+            "filename": "openvswitch-minivm-2.17.9.qcow2",
+            "version": "2.17.9",
+            "md5sum": "ff51aaf53671816de731f61fc7b89c43",
+            "filesize": 7730688
+        },
+        {
+            "filename": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+            "version": "6.1.76",
+            "md5sum": "75b186c33fad7ea14834cfee19c02db0",
+            "filesize": 14021856
+        },
+        {
+            "filename": "debian-initramfs-6.1.0-18-cloud-amd64",
+            "version": "6.1.76",
+            "md5sum": "775abc2138ba18db75d9d96e97abcdea",
+            "filesize": 2489188
+        },
+        {
+            "filename": "debian-modules-6.1.0-18-cloud-amd64.qcow2",
+            "version": "6.1.76",
+            "md5sum": "0d6dc74f9c79237a0ca8808bf0aa66dc",
+            "filesize": 25373696
+        }
+    ],
+    "versions": [
+        {
+            "name": "2.17.9",
+            "images": {
+                "hda_disk_image": "openvswitch-minivm-2.17.9.qcow2",
+                "kernel_image": "debian-vmlinuz-6.1.0-18-cloud-amd64",
+                "initrd": "debian-initramfs-6.1.0-18-cloud-amd64",
+                "hdb_disk_image": "debian-modules-6.1.0-18-cloud-amd64.qcow2"
+            }
+        }
+    ]
+}
