@@ -11,6 +11,9 @@ if ! grep -q " /etc/hostname " /proc/mounts; then
 	sed -n 's/^ *\(eth[0-9]*\): .*/\1/p' /proc/net/dev | sort -V | \
 		while read -r intf; do ip link set dev "$intf" up; done
 	ifup -a -f
+	# simple logrotate: rename *.log to *.log.1
+	[ -d /var/log/openvswitch ] && \
+	find /var/log/openvswitch -name '*.log' -type f -exec mv {} {}.1 \;
 fi
 
 /etc/openvswitch/init.sh
