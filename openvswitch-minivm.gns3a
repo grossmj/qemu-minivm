@@ -31,8 +31,8 @@
         {
             "filename": "openvswitch-minivm-2.17.9.qcow2",
             "version": "2.17.9",
-            "md5sum": "adb03816fd911c93dcb5834cd57fd4b5",
-            "filesize": 7729152
+            "md5sum": "5ef3e4727859e72342a1b5f48c13f237",
+            "filesize": 8026112
         },
         {
             "filename": "debian-vmlinuz-6.1.0-21-cloud-amd64",

@@ -44,7 +44,7 @@ void perror_exit(const char *s) {
 }
 
 /* halt VM */
-void do_halt(int do_reboot) {
+void do_halt(int flag_reboot) {
     static int run_once = 0;
     pid_t pid;
 
@@ -76,14 +76,14 @@ void do_halt(int do_reboot) {
         perror_exit("fork");
     else if (pid == 0) {	/* child */
         sync();
-        reboot(do_reboot ? RB_AUTOBOOT : RB_POWER_OFF);
+        reboot(flag_reboot ? RB_AUTOBOOT : RB_POWER_OFF);
         _exit(0);
     }
 }
 
 /* signal handler for halting a VM */
 void sig_halt(int sig) {
-    do_halt(sig == SIGTERM);
+    do_halt(sig == SIGINT || sig == SIGTERM);
 }
 
 /* mount a filesystem with error checking */
@@ -152,9 +152,10 @@ int main(int argc, char *argv[]) {
     }
 
     /* catch signals for halt/poweroff/reboot */
+    signal(SIGINT,  sig_halt);		/* Ctrl-Alt-Del */
+    signal(SIGTERM, sig_halt);		/* reboot */
     signal(SIGUSR1, sig_halt);		/* halt */
     signal(SIGUSR2, sig_halt);		/* poweroff */
-    signal(SIGTERM, sig_halt);		/* reboot */
 
     /* wait for child to exit */
     do

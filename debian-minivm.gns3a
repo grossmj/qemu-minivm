@@ -30,8 +30,8 @@
         {
             "filename": "debian-minivm-12.5.qcow2",
             "version": "12.5",
-            "md5sum": "024e1cb984748d506971267b1c063ffe",
-            "filesize": 40811520
+            "md5sum": "7e615f15baee24a271e5794f74774836",
+            "filesize": 40837632
         },
         {
             "filename": "debian-vmlinuz-6.1.0-21-cloud-amd64",

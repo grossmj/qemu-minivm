@@ -28,10 +28,10 @@
     },
     "images": [
         {
-            "filename": "alpine-minivm-3.19.1.qcow2",
-            "version": "3.19.1",
-            "md5sum": "879a1b65d8c7b4bb39583caf35331636",
-            "filesize": 4272128
+            "filename": "alpine-minivm-3.20.0.qcow2",
+            "version": "3.20.0",
+            "md5sum": "c9bc0dd843d932771b7f8a4eaf9143c7",
+            "filesize": 4468736
         },
         {
             "filename": "debian-vmlinuz-6.1.0-21-cloud-amd64",
@@ -54,9 +54,9 @@
     ],
     "versions": [
         {
-            "name": "3.19.1",
+            "name": "3.20.0",
             "images": {
-                "hda_disk_image": "alpine-minivm-3.19.1.qcow2",
+                "hda_disk_image": "alpine-minivm-3.20.0.qcow2",
                 "kernel_image": "debian-vmlinuz-6.1.0-21-cloud-amd64",
                 "initrd": "debian-initramfs-6.1.0-21-cloud-amd64",
                 "hdb_disk_image": "debian-modules-6.1.0-21-cloud-amd64.qcow2"
