@@ -29,6 +29,21 @@ from `lib/modules/<kernel_version>` and packs them into
 `modules-<kernel_version>.qcow2`.
 
 Finally we have to create the initial RAM disk.
+Gentoo Linux has a good introduction:
+<https://wiki.gentoo.org/wiki/Custom_Initramfs>.
+
+The `ramdisk-template` directory contains the `init` script and
+the binaries, that are needed while executing the initial RAM disk.
+
+For the vast majority of the programs an Alpine
+[static busybox](https://pkgs.alpinelinux.org/package/edge/main/x86_64/busybox-static) is used.
+The `busybox.static` program is copied to `ramdisk-template/bin/busybox`,
+then `busybox --list-full` is used to create the symbolic links.
+As Alpine doesn't provide a statically linked `e2fsck`, the Debian package
+[e2fsck-static](https://packages.debian.org/bookworm/e2fsck-static) is used.
+The `e2fsck.static` is copied to `ramdisk-template/bin/e2fsck`, then
+the symbolic links `fsck.ext2`, `fsck.ext3` and `fsck.ext4` are created.
+
 We don't want to put all the modules into the RAM disk.
 So we need to create/modify the `modules.ramfs` configuration file,
 which contains the files/directories of the modules we want to include.
