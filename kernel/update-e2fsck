@@ -1,0 +1,20 @@
+#!/bin/sh
+# update e2fsck in RAM disk template
+
+set -e
+
+cd ramdisk-template
+mkdir -p bin sbin
+
+# get static e2fsck from Debian
+docker run --rm --volume "$PWD:/template" debian sh -c -e '
+apt-get update
+apt-get -y --no-install-recommends install e2fsck-static
+cp -p /sbin/e2fsck.static /template/sbin/e2fsck
+chown --reference=/template /template/sbin/e2fsck
+'
+
+# add links
+ln -sf e2fsck sbin/fsck.ext2
+ln -sf e2fsck sbin/fsck.ext3
+ln -sf e2fsck sbin/fsck.ext4

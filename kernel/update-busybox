@@ -1,0 +1,26 @@
+#!/bin/sh
+# update busybox in RAM disk template
+
+set -e
+
+cd ramdisk-template
+mkdir -p bin sbin
+
+# get static busybox from Alpine Linux
+docker run --rm --volume "$PWD:/template" alpine sh -c -e '
+apk add busybox-static
+cp -p /bin/busybox.static /template/busybox
+chown "$(stat -c "%u:%g" /template)" /template/busybox
+'
+
+# remove old busybox and links
+if [ -f bin/busybox ]; then
+	find -L bin sbin -samefile bin/busybox ! -path bin/busybox -print0 | \
+		xargs -r -0 rm -f
+	rm -f bin/busybox
+fi
+
+# add new busybox and links
+mv busybox bin
+bin/busybox --list-all | grep -ow 'bin/.*' | xargs -n 1 ln -sf busybox
+bin/busybox --list-all | grep -ow 'sbin/.*' | xargs -n 1 ln -sf ../bin/busybox
