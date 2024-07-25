@@ -23,7 +23,10 @@ trap 'rm -rf "$tempdir" 2> /dev/null' EXIT
 echo "Creating initramfs..."
 
 cp -a "$template"/* "$tempdir"
-mkdir -p "$tempdir/lib/modules/$version/kernel"
+for dir in bin dev lib mnt mnt/root proc sbin sys tmp; do
+	mkdir -p -m 755 "$tempdir/$dir"
+done
+mkdir -p -m 755 "$tempdir/lib/modules/$version/kernel"
 sed -e 's/\s*#.*//' -e '/^\s*$/d' modules.ramfs | xargs tar c -C "lib/modules/$version/kernel" | tar x -C "$tempdir/lib/modules/$version/kernel"
 cp -p "lib/modules/$version"/modules.* "$tempdir/lib/modules/$version/"
 PATH="$PATH:/usr/sbin:/sbin" depmod -a -b "$tempdir" "$version"
